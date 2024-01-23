@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+
+        .left,
+        .right {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        input[type="button"] {
+            background-color: #3498db;
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="button"]:hover {
+            background-color: #2980b9;
+        }
+
+        /* Added style for the total amount */
+        #totalAmount {
+            margin-top: 20px;
+            color: #000; /* Set the text color to black */
+        }
+    </style>
+    <title>Responsive Payment Gateway Form Design</title>
+    <link rel="stylesheet" type="text/css" href="css/payment.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="left">
+                <h3>BILLING ADDRESS</h3>
+                <form id="billingForm" action="store_billing.php" method="POST">
+                    Full name
+                    <input type="text" name="name" placeholder="Enter name">
+                    Email
+                    <input type="text" name="email" placeholder="Enter email">
+                    Address
+                    <input type="text" name="address" placeholder="Enter address">
+                    City
+                    <input type="text" name="city" placeholder="Enter City">
+                    <div id="zip">
+                        <label>
+                            State
+                            <select name="state">
+                                <option>Choose State..</option>
+                                <option>Rajasthan</option>
+                                <option>Hariyana</option>
+							<option>Uttar Pradesh</option>
+							<option>Madhya Pradesh</option>
+							<option>Andhra Pradesh</option>
+							<option>Arunachal Pradesh</option>
+							<option>Assam</option>
+							<option>Bihar</option>
+							<option>Chhattisgarh</option>
+							<option>Goa</option>
+							<option>Gujarat</option>
+							<option>Himachal Pradesh</option>
+							<option>Jharkhand</option>
+							<option>Karnataka</option>
+							<option>Kerala</option>
+							<option>Maharashtra</option>
+							<option>Manipur</option>
+							<option>Meghalaya</option>
+							<option>Mizoram</option>
+							<option>Nagaland</option>
+							<option>Odisha</option>
+							<option>Punjab</option>
+							<option>Sikkim</option>
+							<option>Tamil Nadu</option>
+							<option>Telangana</option>
+							<option>Tripura</option>
+							<option>Uttarakhand</option>
+							<option>West Bengal</option>
+                            </select>
+                        </label>
+                        <label>
+                            Zip code
+                            <input type="number" name="zipcode" placeholder="Enter code">
+                        </label>
+                    </div>
+    
+                    <!-- Add the Save button here -->
+                    <input type="button" value="Save" onclick="saveBillingInfo()">
+                </form>
+            </div>
+        </div>
+    </header>
+    
+    <script>
+        function saveBillingInfo() {
+            // You can add any additional logic here before submitting the form if needed
+    
+            // Submit the form
+            document.getElementById("billingForm").submit();
+        }
+    </script>    
+            <div class="right">
+                <!-- Display total amount here -->
+                <div id="totalAmount">Total Amount: $0.00</div>
+                <input type="button" value="Proceed to Checkout" onclick="redirectToCheckout()">
+            </div>
+        </div>
+    </header>
+    <script>
+        function updateTotalAmount() {
+            // Get the total amount from the query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const totalAmount = parseFloat(urlParams.get('totalAmount'));
+
+            // Check if totalAmount is a valid number
+            if (!isNaN(totalAmount)) {
+                // Update the total amount on the page
+                var totalAmountElement = document.getElementById('totalAmount');
+                totalAmountElement.textContent = `Total Amount: $${totalAmount.toFixed(2)}`;
+            } else {
+                // Display a message or handle the case where totalAmount is not a valid number
+                console.error("Invalid totalAmount:", totalAmount);
+            }
+        }
+
+        // Call the function when the page loads
+        window.onload = function () {
+            updateTotalAmount();
+        };
+
+        function redirectToCheckout() {
+            // Extract data from the form
+            var form = document.getElementById('billingForm');
+            var formData = new FormData(form);
+
+            // Construct the checkout URL with total price and other data
+            var totalPrice = calculateTotalPrice(); // Assuming you have a function to calculate total price
+            var checkoutURL = "https://razorpay.me/@brushbazar?total=" + totalPrice;
+
+            // Append form data to the URL
+            for (var pair of formData.entries()) {
+                checkoutURL += "&" + pair[0] + "=" + pair[1];
+            }
+
+            // Redirect to the checkout URL
+            window.location.href = checkoutURL;
+        }
+
+        // Function to calculate total price (modify as needed)
+        function calculateTotalPrice() {
+            var totalPrice = 0;
+
+            // Assume you have a cart array with product prices and quantities
+            // Replace this with your actual logic to calculate the total price
+
+            return totalPrice;
+        }
+    </script>
+</body>
+</html>
